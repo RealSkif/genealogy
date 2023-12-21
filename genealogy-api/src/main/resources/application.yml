@@ -1,0 +1,75 @@
+server:
+  hostname: ${HOSTNAME:localhost}
+  external:
+    ip: ${EXTERNAL_IP}
+    host: "${EXTERNAL_IP}:${server.port}"
+  url: "http://${server.external.host}${server.servlet.context-path}"
+  servlet:
+    context-path: /api/genealogy
+  shutdown: graceful
+
+spring:
+  main:
+    banner-mode: off
+
+  datasource:
+    url: jdbc:postgresql://${database.host}:5432/genealogy
+    username: postgres
+    password: ${datasource_password}
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      idle-timeout: 10000
+      minimum-idle: 1
+      maximum-pool-size: 20
+      auto-commit: false
+  jpa:
+    properties:
+      hibernate:
+        dialect: com.github.alexliesenfeld.querydsl.jpa.hibernate.PostgreSQLJsonDialect
+        hbm2ddl:
+          auto: none
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        connection:
+          autocommit: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    open-in-view: false
+    lifecycle:
+      timeout-per-shutdown-phase: 1m
+  output:
+    ansi:
+      enabled: ALWAYS
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+    defaultModelsExpandDepth: -1
+    defaultModelRendering: model
+    supportedSubmitMethods: [ ]
+swagger:
+  enabled: false
+  info:
+    title: Генеалогический сервис
+    version: 1.0
+    description:
+logging:
+  path: target/logs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: false
+    health:
+      show-details: always
+  info:
+    git:
+      mode: full

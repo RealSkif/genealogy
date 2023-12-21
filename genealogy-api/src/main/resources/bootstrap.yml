@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: genealogy
+    group: Common
+  cloud:
+    consul:
+      config:
+        failFast: false
+      discovery:
+        instanceId: "${spring.application.instance}-${server.type}-${spring.application.group}-${EXTERNAL_IP}-${server.port}-${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}"
+    vault:
+      scheme: http
+      host: ${VAULT_HOST}
+      port: 8200
+      authentication: APPROLE
+      app-role:
+        role-id: ${VAULT_ROLE}
+        secret-id: ${VAULT_SECRET}
+        app-role-path: approle
+        role: pres-read

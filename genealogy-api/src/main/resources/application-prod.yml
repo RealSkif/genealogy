@@ -1,0 +1,15 @@
+server:
+  type: Production
+  port: 8103
+database:
+  host: localhost
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+alert:
+  controller:
+    enabled: true

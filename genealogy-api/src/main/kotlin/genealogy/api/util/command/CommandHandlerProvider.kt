@@ -1,4 +1,7 @@
+package genealogy.api.util.command
 
+import genealogy.domain.utils.command.Command
+import genealogy.domain.utils.command.CommandHandler
 import org.springframework.context.ApplicationContext
 
 /**

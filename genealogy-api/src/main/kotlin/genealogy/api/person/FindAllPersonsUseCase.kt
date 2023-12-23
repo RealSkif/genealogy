@@ -1,4 +1,7 @@
-import genealogy.api.config.stereotype.UseCase
+
+package genealogy.api.person
+
+import genealogy.api.util.stereotype.UseCase
 import genealogy.domain.person.Person
 import genealogy.domain.person.PersonRepository
 

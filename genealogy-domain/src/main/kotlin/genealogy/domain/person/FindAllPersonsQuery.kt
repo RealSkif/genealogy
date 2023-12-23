@@ -1,6 +1,6 @@
 package genealogy.domain.person
 
-import Query
+import genealogy.domain.utils.query.Query
 
 class FindAllPersonsQuery: Query<Collection<Person>> {
 }

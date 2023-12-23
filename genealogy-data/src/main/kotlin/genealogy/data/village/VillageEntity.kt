@@ -1,11 +1,14 @@
 package genealogy.data.village
 
+import genealogy.data.document.DocumentEntity
+import genealogy.data.household.HouseHoldEntity
+import genealogy.data.person.PersonEntity
 import genealogy.domain.document.Document
 import genealogy.domain.houshold.HouseHold
 import genealogy.domain.person.Person
 import genealogy.domain.village.Village
 import java.util.*
-import javax.persistence.*
+import jakarta.persistence.*
 
 
 @Entity
@@ -25,13 +28,13 @@ class VillageEntity(
         joinColumns = [JoinColumn(name = "VillageId")],
         inverseJoinColumns = [JoinColumn(name = "DocumentId")]
     )
-    override val documents: Collection<Document>,
+    override val documents: Collection<DocumentEntity>,
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VillageId", referencedColumnName = "HouseHold")
-    override val houseHolds: Collection<HouseHold>,
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "village")
+    override val houseHolds: Collection<HouseHoldEntity> = mutableListOf(),
 
     @ManyToMany(mappedBy = "villages")
-    override val persons: Collection<Person>
+    override val persons: Collection<PersonEntity>
 ) : Village {
 }

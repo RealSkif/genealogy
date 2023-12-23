@@ -1,31 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
-
+group = "genealogy"
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
-}
-
-group = "Genealogy"
-version = "0.0.1-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-}
-
-repositories {
-    mavenCentral()
-}
-configure<NoArgExtension> {
-    annotation("javax.persistence.Entity")
-}
-
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
+    kotlin("jvm")
 }
 
 dependencies {
@@ -43,13 +18,12 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "21"
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+//
+//val sourcesJar by tasks.registering(Jar::class) {
+//    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+//    archiveClassifier.set("sources")
+//    from(sourceSets["main"].allSource)
+//}
+//artifacts {
+//    add("archives", sourcesJar)
+//}

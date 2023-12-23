@@ -1,24 +1,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
+import org.springframework.boot.gradle.tasks.run.BootRun
+import java.io.PrintWriter
+
+base.archivesBaseName = "genealogy"
+group = "genealogy"
 
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    kotlin("plugin.jpa")
+    kotlin("kapt")
+
 }
 
-group = "Genealogy"
-version = "0.0.1-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-}
-
-repositories {
-    mavenCentral()
-}
 configure<NoArgExtension> {
     annotation("javax.persistence.Entity")
 }
@@ -29,6 +26,8 @@ allOpen {
 }
 dependencies {
     implementation(project(":genealogy-domain"))
+    implementation(project(":genealogy-data"))
+    implementation(project(":genealogy-web"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -45,6 +44,31 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+//val sourcesJar by tasks.registering(Jar::class) {
+//    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+//    archiveClassifier.set("sources")
+//    from(sourceSets["main"].allSource)
+//}
+//
+//artifacts {
+//    add("archives", sourcesJar)
+//}
+tasks.named<BootRun>("bootRun") {
+    if (project.hasProperty("profiles")) {
+        args = listOf("--spring.profiles.active=" + project.property("profiles"))
+    }
 }
+
+tasks.withType<ProcessResources> {
+    doLast {
+        val file = File("$buildDir/resources/main/build.properties")
+        file.createNewFile()
+        file.printWriter()
+            .use { out: PrintWriter ->
+                out.println("group=${project.group}")
+                out.println("name=${project.name}")
+                out.println("version=${project.version}")
+            }
+    }
+}
+

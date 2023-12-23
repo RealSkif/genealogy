@@ -1,3 +1,4 @@
+package genealogy.domain.utils.query
 
 /**
  * Шина запросов

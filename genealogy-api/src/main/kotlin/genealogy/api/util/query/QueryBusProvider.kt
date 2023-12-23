@@ -1,3 +1,8 @@
+package genealogy.api.util.query
+
+import genealogy.domain.utils.query.Query
+import genealogy.domain.utils.query.QueryBus
+import genealogy.domain.utils.query.QueryRegistry
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional

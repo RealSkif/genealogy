@@ -1,7 +1,7 @@
-package genealogy.api.config.stereotype
+package genealogy.api.util.stereotype
 import org.springframework.stereotype.Component
 
 @Component
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Handler
+annotation class UseCase

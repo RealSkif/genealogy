@@ -1,3 +1,4 @@
+package genealogy.domain.utils.command
 /**
  * Реестр обработчиков команд
  */

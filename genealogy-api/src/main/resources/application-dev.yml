@@ -1,6 +1,6 @@
 server:
-  type: Production
-  port: 8103
+  type: Development
+  port: 8104
 database:
   host: localhost
 

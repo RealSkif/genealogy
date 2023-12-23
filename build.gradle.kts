@@ -1,48 +1,57 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+import org.gradle.api.tasks.wrapper.Wrapper
 
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
+    base
+    id("org.springframework.boot") version "3.2.0" apply false
+    id("io.spring.dependency-management") version "1.1.4" apply false
+    kotlin("jvm") version "1.9.20" apply false
+    kotlin("plugin.spring") version "1.9.20" apply false
+    kotlin("plugin.jpa") version "1.9.20" apply false
 }
 
-group = "Genealogy"
-version = "0.0.1-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-}
-
-repositories {
-    mavenCentral()
-}
-configure<NoArgExtension> {
-    annotation("javax.persistence.Entity")
-}
-
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-}
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    runtimeOnly("org.postgresql:postgresql")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "21"
+allprojects {
+    repositories {
+        mavenCentral()
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
+    apply(plugin = "io.spring.dependency-management")
+
+    the<DependencyManagementExtension>()
+        .apply {
+            imports {
+                mavenBom(SpringBootPlugin.BOM_COORDINATES)
+            }
+        }
+//    val implementation by configurations
+//
+//    dependencies {
+//        implementation(subprojects)
+//    }
+//    tasks.withType<KotlinCompile> {
+//        kotlinOptions {
+//            jvmTarget = "1.8" // Adjust to your desired JVM version
+//            freeCompilerArgs = listOf("-Xjsr305=strict")
+//        }
+//    }
+    tasks.withType<KotlinCompile>()
+        .configureEach {
+            kotlinOptions {
+                jvmTarget = "21"
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
+        }
+
+}
+
+
+
+tasks.withType<Wrapper> {
+    gradleVersion = "8.5"
 }

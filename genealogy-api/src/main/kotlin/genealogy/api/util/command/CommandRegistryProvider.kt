@@ -1,4 +1,8 @@
+package genealogy.api.util.command
 
+import genealogy.domain.utils.command.Command
+import genealogy.domain.utils.command.CommandHandler
+import genealogy.domain.utils.command.CommandRegistry
 import org.springframework.context.ApplicationContext
 import org.springframework.core.GenericTypeResolver
 import org.springframework.stereotype.Component
@@ -14,7 +18,8 @@ class CommandRegistryProvider(
     /**
      * Карта обработчиков команд
      */
-    private val commandHandlerProviderMap: MutableMap<Class<out Command<*>>, CommandHandlerProvider<CommandHandler<Command<*>, *>>> = mutableMapOf()
+    private val commandHandlerProviderMap: MutableMap<Class<out Command<*>>,
+            CommandHandlerProvider<CommandHandler<Command<*>, *>>> = mutableMapOf()
 
     init {
         registerCommandHandlers()

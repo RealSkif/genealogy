@@ -1,15 +1,17 @@
 package genealogy.data.person
 
+import genealogy.data.document.DocumentEntity
+import genealogy.data.household.HouseHoldEntity
+import genealogy.data.village.VillageEntity
+import genealogy.domain.houshold.HouseHold
 import genealogy.domain.person.Person
 import genealogy.domain.person.PersonAdditionalInfoEnum
 import genealogy.domain.person.SocialStatusEnum
-import genealogy.domain.village.Village
-import genealogy.domain.document.Document
 import java.util.*
-import javax.persistence.*
+import jakarta.persistence.*
 
 /**
- * Обращение
+ * Человек
  */
 @Entity
 @Table(schema = "Genealogy", name = "Person")
@@ -31,13 +33,15 @@ class PersonEntity(
     @Column(name = "Age")
     override val age: Int,
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "MotherId", referencedColumnName = "PersonId")
-    override val mother: Person,
+    @Column(name = "MotherId")
+//    @OneToOne(cascade = [CascadeType.PERSIST])
+//    @JoinColumn(name = "MotherId", referencedColumnName = "PersonId")
+    override val motherId: UUID,
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "FatherId", referencedColumnName = "PersonId")
-    override val father: Person,
+    @Column(name = "FatherId")
+//    @OneToOne(cascade = [CascadeType.PERSIST])
+//    @JoinColumn(name = "FatherId", referencedColumnName = "PersonId")
+    override val fatherId: UUID,
 
     @Column(name = "SocialStatus")
     @Enumerated(EnumType.STRING)
@@ -53,7 +57,7 @@ class PersonEntity(
         joinColumns = [JoinColumn(name = "PersonId")],
         inverseJoinColumns = [JoinColumn(name = "DocumentId")]
     )
-    override val documents: Collection<Document>,
+    override val documents: Collection<DocumentEntity>,
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinTable(
@@ -61,5 +65,9 @@ class PersonEntity(
         joinColumns = [JoinColumn(name = "PersonId")],
         inverseJoinColumns = [JoinColumn(name = "VillageId")]
     )
-    override val villages: Collection<Village>
+    override val villages: Collection<VillageEntity>,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HouseHoldId", referencedColumnName = "HouseHoldId")
+    override val household: HouseHoldEntity
 ) : Person

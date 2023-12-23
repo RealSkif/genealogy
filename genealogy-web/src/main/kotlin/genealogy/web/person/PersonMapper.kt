@@ -2,6 +2,7 @@ package genealogy.web.person
 
 import genealogy.domain.person.Person
 import genealogy.web.document.DocumentMapper.toDto
+import genealogy.web.household.HouseHoldMapper.toDto
 import genealogy.web.village.VillageMapper.toDto
 
 object PersonMapper {
@@ -12,13 +13,14 @@ object PersonMapper {
             firstName = this.firstName,
             secondName = this.secondName,
             middleName = this.middleName,
-            age = this.age,
-            mother = this.mother.toDto(),
-            father = this.father.toDto(),
+            age = 7,
+            motherId = this.motherId,
+            fatherId = this.fatherId,
             socialStatus = this.socialStatus,
             additionalInfo = this.additionalInfo,
-            villages = this.villages.toDto(),
-            documents = this.documents.toDto()
+            villages = this.villages?.toDto(),
+            documents = this.documents?.toDto(),
+            household = this.household.toDto()
         )
 
     fun Collection<Person>.toDto(): Collection<PersonDto> =

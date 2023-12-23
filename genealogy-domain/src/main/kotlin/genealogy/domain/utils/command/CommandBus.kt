@@ -1,3 +1,4 @@
+package genealogy.domain.utils.command
 
 /**
  * Шина для передачи команд

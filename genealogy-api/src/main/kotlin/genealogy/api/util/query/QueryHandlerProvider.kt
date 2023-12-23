@@ -1,4 +1,7 @@
+package genealogy.api.util.query
 
+import genealogy.domain.utils.query.Query
+import genealogy.domain.utils.query.QueryHandler
 import org.springframework.context.ApplicationContext
 
 /**

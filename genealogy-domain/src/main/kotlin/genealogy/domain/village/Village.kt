@@ -8,7 +8,7 @@ import java.util.UUID
 interface Village {
 val id: UUID
 val name: String
-val documents: Collection<Document>
-val houseHolds: Collection<HouseHold>
-val persons: Collection<Person>
+val documents: Collection<genealogy.domain.document.Document>
+val houseHolds: Collection<genealogy.domain.houshold.HouseHold>
+val persons: Collection<genealogy.domain.person.Person>
 }

@@ -1,3 +1,5 @@
+package genealogy.domain.utils.query
+
 
 /**
  * Обработчик запроса

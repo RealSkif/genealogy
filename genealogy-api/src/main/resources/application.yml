@@ -10,14 +10,15 @@ server:
 
 spring:
   main:
-    banner-mode: off
+    banner-mode: CONSOLE
 
   datasource:
     url: jdbc:postgresql://${database.host}:5432/genealogy
     username: postgres
-    password: ${datasource_password}
+    password: 9035
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
+
     hikari:
       idle-timeout: 10000
       minimum-idle: 1
@@ -25,8 +26,9 @@ spring:
       auto-commit: false
   jpa:
     properties:
+      generate-ddl: true
       hibernate:
-        dialect: com.github.alexliesenfeld.querydsl.jpa.hibernate.PostgreSQLJsonDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
           auto: none
         jdbc:
@@ -35,7 +37,6 @@ spring:
         connection:
           autocommit: false
     hibernate:
-      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     open-in-view: false
@@ -58,8 +59,13 @@ swagger:
     title: Генеалогический сервис
     version: 1.0
     description:
+
 logging:
-  path: target/logs
+  level:
+    org.springframework.web: DEBUG
+  file:
+    path: target/logs
+
 management:
   endpoints:
     web:

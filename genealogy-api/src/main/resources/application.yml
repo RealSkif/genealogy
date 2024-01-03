@@ -6,19 +6,21 @@ server:
   url: "http://${server.external.host}${server.servlet.context-path}"
   servlet:
     context-path: /api/genealogy
+    encoding:
+      charset: UTF-8
+      force-response: true
   shutdown: graceful
-
 spring:
   main:
     banner-mode: CONSOLE
 
+
   datasource:
-    url: jdbc:postgresql://${database.host}:5432/genealogy
+    url: jdbc:postgresql://${database.host}:5432/genealogy-db
     username: postgres
     password: 9035
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
-
     hikari:
       idle-timeout: 10000
       minimum-idle: 1
@@ -26,8 +28,8 @@ spring:
       auto-commit: false
   jpa:
     properties:
-      generate-ddl: true
       hibernate:
+        default_schema: genealogy
         dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
           auto: none
@@ -37,32 +39,37 @@ spring:
         connection:
           autocommit: false
     hibernate:
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
     open-in-view: false
     lifecycle:
       timeout-per-shutdown-phase: 1m
   output:
     ansi:
       enabled: ALWAYS
+
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
-    enabled: false
+    enabled: true
     defaultModelsExpandDepth: -1
     defaultModelRendering: model
     supportedSubmitMethods: [ ]
 swagger:
-  enabled: false
+  enabled: true
   info:
     title: Генеалогический сервис
     version: 1.0
     description:
 
 logging:
-  level:
-    org.springframework.web: DEBUG
+
+#  level:
+#    org.hibernate: DEBUG
+#    org.springframework.web: DEBUG
   file:
     path: target/logs
 

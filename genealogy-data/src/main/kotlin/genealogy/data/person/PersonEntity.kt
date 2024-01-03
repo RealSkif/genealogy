@@ -2,72 +2,81 @@ package genealogy.data.person
 
 import genealogy.data.document.DocumentEntity
 import genealogy.data.household.HouseHoldEntity
-import genealogy.data.village.VillageEntity
-import genealogy.domain.houshold.HouseHold
+import genealogy.data.settlement.SettlementEntity
 import genealogy.domain.person.Person
 import genealogy.domain.person.PersonAdditionalInfoEnum
 import genealogy.domain.person.SocialStatusEnum
-import java.util.*
 import jakarta.persistence.*
+import java.util.*
 
-/**
- * Человек
- */
+/** Человек */
 @Entity
-@Table(schema = "Genealogy", name = "Person")
-//@DynamicUpdate
+@Table(schema = "genealogy", name = "person")
 class PersonEntity(
-    @Id
-    @Column(name = "PersonId")
-    override val id: UUID = UUID.randomUUID(),
 
+    /** Идентификатор человека */
+    @Id
+    @Column(name = "personId")
+    override val personId: UUID = UUID.randomUUID(),
+
+    /** Имя человека */
     @Column(name = "FirstName")
     override val firstName: String,
 
+    /** Фамилия человека */
     @Column(name = "SecondName")
     override val secondName: String,
 
+    /** Отчество человека */
     @Column(name = "MiddleName")
     override val middleName: String,
 
-    @Column(name = "Age")
-    override val age: Int,
+    /** Возраст */
+    @Column(name = "BirthYear")
+    override val birthYear: Int,
 
+    /** Идентификатор матери человека */
     @Column(name = "MotherId")
-//    @OneToOne(cascade = [CascadeType.PERSIST])
-//    @JoinColumn(name = "MotherId", referencedColumnName = "PersonId")
-    override val motherId: UUID,
+    override val motherId: UUID?,
 
+    /** Идентификатор отца человека */
     @Column(name = "FatherId")
-//    @OneToOne(cascade = [CascadeType.PERSIST])
-//    @JoinColumn(name = "FatherId", referencedColumnName = "PersonId")
-    override val fatherId: UUID,
+    override val fatherId: UUID?,
 
+    /** Социальный статус человека */
     @Column(name = "SocialStatus")
     @Enumerated(EnumType.STRING)
     override val socialStatus: SocialStatusEnum,
 
+    /** Дополнительная информация */
     @Column(name = "AdditionalInfo")
     @Enumerated(EnumType.STRING)
-    override val additionalInfo: PersonAdditionalInfoEnum,
+    override val additionalInfo: PersonAdditionalInfoEnum? = null,
 
+    /** Документы, в которых упоминается человек */
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinTable(
-        name = "Document_Person",
-        joinColumns = [JoinColumn(name = "PersonId")],
-        inverseJoinColumns = [JoinColumn(name = "DocumentId")]
+        name = "document_person",
+        joinColumns = [JoinColumn(name = "personId")],
+        inverseJoinColumns = [JoinColumn(name = "documentId")]
     )
-    override val documents: Collection<DocumentEntity>,
+    override var documents: MutableList<DocumentEntity>,
 
+    /** Поселения, в которых проживал человек */
     @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinTable(
-        name = "Village_Person",
-        joinColumns = [JoinColumn(name = "PersonId")],
-        inverseJoinColumns = [JoinColumn(name = "VillageId")]
+        name = "settlement_person",
+        joinColumns = [JoinColumn(name = "personId")],
+        inverseJoinColumns = [JoinColumn(name = "settlementId")]
     )
-    override val villages: Collection<VillageEntity>,
+    override var settlements: MutableList<SettlementEntity>,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HouseHoldId", referencedColumnName = "HouseHoldId")
-    override val household: HouseHoldEntity
+    /** Дворы, в которых проживал человек */
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    @JoinTable(
+        name = "household_person",
+        joinColumns = [JoinColumn(name = "personId")],
+        inverseJoinColumns = [JoinColumn(name = "houseHoldId")]
+    )
+    override var houseHolds: MutableList<HouseHoldEntity>
 ) : Person

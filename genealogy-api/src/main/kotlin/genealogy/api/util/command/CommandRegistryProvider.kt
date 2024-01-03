@@ -7,17 +7,13 @@ import org.springframework.context.ApplicationContext
 import org.springframework.core.GenericTypeResolver
 import org.springframework.stereotype.Component
 
-/**
- * Провайдер реестра обработчиков команд
- */
+/** Провайдер реестра обработчиков команд */
 @Component
 class CommandRegistryProvider(
     private val context: ApplicationContext
 ) : CommandRegistry {
 
-    /**
-     * Карта обработчиков команд
-     */
+    /** Карта обработчиков команд */
     private val commandHandlerProviderMap: MutableMap<Class<out Command<*>>,
             CommandHandlerProvider<CommandHandler<Command<*>, *>>> = mutableMapOf()
 
@@ -25,9 +21,7 @@ class CommandRegistryProvider(
         registerCommandHandlers()
     }
 
-    /**
-     * Поиск и регистрация обработчиков команд
-     */
+    /** Поиск и регистрация обработчиков команд */
     private fun registerCommandHandlers() {
         // ищем обработчики команд в бинах
         context.getBeanNamesForType(CommandHandler::class.java)
@@ -36,20 +30,18 @@ class CommandRegistryProvider(
             }
     }
 
-    /**
-     * Регистрация обработчика команды
-     */
+    /** Регистрация обработчика команды */
     @Suppress("UNCHECKED_CAST")
     private fun registerCommand(context: ApplicationContext, name: String) {
-        val handlerClass: Class<CommandHandler<Command<*>, *>> = context.getType(name) as Class<CommandHandler<Command<*>, *>>
-        val generics: Array<Class<*>> = GenericTypeResolver.resolveTypeArguments(handlerClass, CommandHandler::class.java)!!
+        val handlerClass: Class<CommandHandler<Command<*>, *>> =
+            context.getType(name) as Class<CommandHandler<Command<*>, *>>
+        val generics: Array<Class<*>> =
+            GenericTypeResolver.resolveTypeArguments(handlerClass, CommandHandler::class.java)!!
         val commandType: Class<out Command<*>> = generics.first() as Class<out Command<*>>
         commandHandlerProviderMap[commandType] = CommandHandlerProvider(context = context, type = handlerClass)
     }
 
-    /**
-     * Получение обработчика команды
-     */
+    /** Получение обработчика команды */
     @Suppress("UNCHECKED_CAST")
     override fun <C : Command<T>, T> getCommandHandler(commandClass: Class<C>): CommandHandler<C, T> =
         commandHandlerProviderMap[commandClass]

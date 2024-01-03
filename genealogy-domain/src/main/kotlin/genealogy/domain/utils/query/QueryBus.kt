@@ -1,11 +1,8 @@
 package genealogy.domain.utils.query
 
-/**
- * Шина запросов
- */
+/** Шина запросов */
 interface QueryBus {
-    /**
-     * Выполнение запроса
-     */
-    fun <Q: Query<R>, R> execute(query: Q): R
+
+    /** Выполнение запроса */
+    fun <Q : Query<R>, R> execute(query: Q): R
 }

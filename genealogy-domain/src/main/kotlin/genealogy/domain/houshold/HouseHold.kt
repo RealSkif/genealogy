@@ -1,12 +1,20 @@
 package genealogy.domain.houshold
 
 import genealogy.domain.person.Person
-import genealogy.domain.village.Village
 import java.util.UUID
 
+/** Двор */
 interface HouseHold {
-    val id: UUID
+
+    /** Идентификатор двора */
+    val houseHoldId: UUID?
+
+    /** Номер двора */
     val houseHoldNumber: Int
-    val village: Village
+
+    /** Поселение, к которому относится двор */
+    val settlementId: UUID
+
+    /** Люди, относящиеся к двору */
     val persons: Collection<Person>
 }

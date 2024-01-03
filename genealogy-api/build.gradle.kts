@@ -12,7 +12,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
-    kotlin("kapt")
+//    kotlin("kapt")
 
 }
 
@@ -34,25 +34,20 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("org.postgresql:postgresql")
+
+    implementation("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jpa")
+    implementation("com.querydsl:querydsl-core:${property("queryDslVersion")}")
+    implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+
+}
+val sourcesJar by tasks.registering(Jar::class) {
+    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "21"
-    }
-}
-
-//val sourcesJar by tasks.registering(Jar::class) {
-//    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-//    archiveClassifier.set("sources")
-//    from(sourceSets["main"].allSource)
-//}
-//
-//artifacts {
-//    add("archives", sourcesJar)
-//}
 tasks.named<BootRun>("bootRun") {
     if (project.hasProperty("profiles")) {
         args = listOf("--spring.profiles.active=" + project.property("profiles"))

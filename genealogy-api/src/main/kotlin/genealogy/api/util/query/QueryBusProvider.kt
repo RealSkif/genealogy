@@ -7,17 +7,13 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * Провайдер шины запросов
- */
+/** Провайдер шины запросов */
 @Component
 class QueryBusProvider(
     private val registry: QueryRegistry
 ) : QueryBus {
 
-    /**
-     * Выполнение запроса
-     */
+    /** Выполнение запроса */
     @Suppress("UNCHECKED_CAST")
     @Transactional(propagation = Propagation.MANDATORY, readOnly = true)
     override fun <Q : Query<T>, T> execute(query: Q): T =

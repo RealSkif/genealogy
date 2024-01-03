@@ -1,28 +1,30 @@
 package genealogy.data.household
 
 import genealogy.data.person.PersonEntity
-import genealogy.data.village.VillageEntity
 import genealogy.domain.houshold.HouseHold
-import genealogy.domain.person.Person
-import genealogy.domain.village.Village
 import java.util.*
 import jakarta.persistence.*
 
+/** Двор */
 @Entity
-@Table(schema = "Genealogy", name = "HouseHold")
+@Table(schema = "genealogy", name = "HouseHold")
 class HouseHoldEntity(
+
+    /** Идентификатор двора */
     @Id
     @Column(name = "HouseHoldId")
-    override val id: UUID,
+    override val houseHoldId: UUID = UUID.randomUUID(),
 
+    /** Номер двора */
     @Column(name = "HouseHoldNumber")
     override val houseHoldNumber: Int,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VillageId", referencedColumnName = "VillageId")
-    override val village: VillageEntity,
+    /** Поселение, к которому относится двор */
+    @Column(name = "settlementId")
+    override var settlementId: UUID,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "household")
-    override val persons: Collection<PersonEntity> = mutableListOf(),
-) : HouseHold {
-}
+    /** Люди, относящиеся к двору */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "houseHolds")
+    override var persons: MutableCollection<PersonEntity> = mutableListOf()
+
+) : HouseHold

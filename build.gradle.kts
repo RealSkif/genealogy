@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm") version "1.9.20" apply false
     kotlin("plugin.spring") version "1.9.20" apply false
     kotlin("plugin.jpa") version "1.9.20" apply false
+//    kotlin("kapt") version "1.9.20" apply false
 }
 
 allprojects {
@@ -29,17 +30,7 @@ subprojects {
                 mavenBom(SpringBootPlugin.BOM_COORDINATES)
             }
         }
-//    val implementation by configurations
-//
-//    dependencies {
-//        implementation(subprojects)
-//    }
-//    tasks.withType<KotlinCompile> {
-//        kotlinOptions {
-//            jvmTarget = "1.8" // Adjust to your desired JVM version
-//            freeCompilerArgs = listOf("-Xjsr305=strict")
-//        }
-//    }
+
     tasks.withType<KotlinCompile>()
         .configureEach {
             kotlinOptions {
@@ -47,7 +38,6 @@ subprojects {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
             }
         }
-
 }
 
 

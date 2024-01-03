@@ -1,34 +1,41 @@
 package genealogy.data.document
 
 import genealogy.data.person.PersonEntity
-import genealogy.data.village.VillageEntity
+import genealogy.data.settlement.SettlementEntity
 import genealogy.domain.document.Document
 import genealogy.domain.document.DocumentTypeEnum
-import genealogy.domain.person.Person
-import genealogy.domain.village.Village
 import java.time.LocalDate
 import java.util.*
 import jakarta.persistence.*
 
+/** Документ */
 @Entity
-@Table(schema = "Genealogy", name = "Person")
+@Table(schema = "genealogy", name = "Document")
 class DocumentEntity(
+
+    /** Идентификатор документа */
     @Id
     @Column(name = "DocumentId")
-    override val id: UUID,
+    override val documentId: UUID? = UUID.randomUUID(),
 
+    /** Наименование документа */
     @Column(name = "Title")
     override val title: String,
 
+    /** Тип документа */
     @Column(name = "DocumentType")
     @Enumerated(EnumType.STRING)
     override val documentType: DocumentTypeEnum,
-    override val year: LocalDate,
 
-    @ManyToMany(mappedBy = "documents")
-    override val villages: Collection<VillageEntity>,
+    /** Дата документа */
+    @Column(name = "Year")
+    override val documentDate: LocalDate,
 
-    @ManyToMany(mappedBy = "documents")
-    override val persons: Collection<PersonEntity>
-) : Document {
-}
+    /** Поселения, упоминаемые в документе */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "documents")
+    override var settlements: MutableList<SettlementEntity>? = mutableListOf(),
+
+    /** Люди, упоминаемые в документе */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "documents")
+    override var persons: MutableList<PersonEntity>? = mutableListOf()
+) : Document

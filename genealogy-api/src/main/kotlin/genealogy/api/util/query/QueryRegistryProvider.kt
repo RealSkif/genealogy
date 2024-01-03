@@ -7,9 +7,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.core.GenericTypeResolver
 import org.springframework.stereotype.Component
 
-/**
- * Провайдер реестра обработчиков запросов
- */
+/** Провайдер реестра обработчиков запросов */
 @Component
 class QueryRegistryProvider(
     private val context: ApplicationContext
@@ -18,28 +16,23 @@ class QueryRegistryProvider(
     /**
      * Карта обработчиков запросов
      */
-    private val queryHandlerProviderMap: MutableMap<Class<out Query<*>>, QueryHandlerProvider<QueryHandler<Query<*>, *>>> =
-        mutableMapOf()
+    private val queryHandlerProviderMap:
+            MutableMap<Class<out Query<*>>, QueryHandlerProvider<QueryHandler<Query<*>, *>>> = mutableMapOf()
 
     init {
         registerQueryHandlers()
     }
 
-    /**
-     * Поиск и регистрация обработчиков запросов
-     */
+    /** Поиск и регистрация обработчиков запросов */
     private fun registerQueryHandlers() {
         // ищем обработчики запросов в бинах
         context.getBeanNamesForType(QueryHandler::class.java)
             .forEach {
-                println("Found QueryHandler bean: $it")
                 registerQuery(context, it)
             }
     }
 
-    /**
-     * Регистрация обработчика запроса
-     */
+    /** Регистрация обработчика запроса */
     @Suppress("UNCHECKED_CAST")
     private fun registerQuery(context: ApplicationContext, name: String) {
         val handlerClass: Class<QueryHandler<Query<*>, *>> = context.getType(name) as Class<QueryHandler<Query<*>, *>>
@@ -49,9 +42,7 @@ class QueryRegistryProvider(
         queryHandlerProviderMap[queryType] = QueryHandlerProvider(context = context, type = handlerClass)
     }
 
-    /**
-     * Получение обработчика команды
-     */
+    /** Получение обработчика команды */
     @Suppress("UNCHECKED_CAST")
     override fun <Q : Query<T>, T> getQueryHandler(queryClass: Class<Q>): QueryHandler<Q, T> =
         queryHandlerProviderMap[queryClass]

@@ -1,11 +1,10 @@
 package genealogy.domain.utils.query
 
-/**
- * Реестр запросов
- */
+/** Реестр запросов */
 interface QueryRegistry {
+
     /**
      * Получение обработчика запросов
      */
-    fun <Q: Query<R>, R> getQueryHandler(queryClass: Class<Q>): QueryHandler<Q, R>
+    fun <Q : Query<R>, R> getQueryHandler(queryClass: Class<Q>): QueryHandler<Q, R>
 }

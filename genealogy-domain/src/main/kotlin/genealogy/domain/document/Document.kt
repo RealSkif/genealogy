@@ -1,22 +1,29 @@
 package genealogy.domain.document
 
 import genealogy.domain.person.Person
-import genealogy.domain.village.Village
+import genealogy.domain.settlement.Settlement
 import java.time.LocalDate
 import java.util.*
 
 
-/**
- * Документ
- */
+/** Документ */
 interface Document {
 
-    /** УИД документа */
-    val id: UUID
+    /** Идентификатор документа */
+    val documentId: UUID?
 
+    /** Наименование документа */
     val title: String
+
+    /** Тип документа */
     val documentType: DocumentTypeEnum
-    val year: LocalDate
-    val villages: Collection<Village>
-    val persons: Collection<Person>
+
+    /** Дата документа */
+    val documentDate: LocalDate
+
+    /** Поселения, упоминаемые в документе */
+    val settlements: Collection<Settlement>?
+
+    /** Люди, упоминаемые в документе */
+    val persons: Collection<Person>?
 }

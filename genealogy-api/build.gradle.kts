@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
 import org.springframework.boot.gradle.tasks.run.BootRun
-import java.io.PrintWriter
 
 base.archivesBaseName = "genealogy"
 group = "genealogy"
@@ -12,17 +10,16 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.jpa")
-//    kotlin("kapt")
-
+    kotlin("kapt")
 }
 
 configure<NoArgExtension> {
-    annotation("javax.persistence.Entity")
+    annotation("jakarta.persistence.Entity")
 }
 
 allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
 }
 dependencies {
     implementation(project(":genealogy-domain"))
@@ -34,14 +31,25 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("org.postgresql:postgresql")
+//    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0-M1")
 
-    implementation("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jpa")
+
+    implementation("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jakarta")
     implementation("com.querydsl:querydsl-core:${property("queryDslVersion")}")
-    implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}")
+    implementation("com.querydsl:querydsl-jpa:${property("queryDslVersion")}:jakarta")
+
+    implementation("com.vladmihalcea:hibernate-types-60:${property("hibernateTypesVersion")}")
+    implementation("com.github.alexliesenfeld:querydsl-jpa-postgres-json:${property("querydslJpaPostgresJsonVersion")}")
+    implementation("org.postgresql:postgresql:${property("postgresVersion")}")
+    implementation("org.hibernate:hibernate-core:${property("hibernateCoreVersion")}")
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:${property("p6spyVersion")}")
+
+    kapt("com.querydsl:querydsl-apt:${property("queryDslVersion")}:jakarta")
+
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-
 }
+
 val sourcesJar by tasks.registering(Jar::class) {
     dependsOn(JavaPlugin.CLASSES_TASK_NAME)
     archiveClassifier.set("sources")
@@ -51,19 +59,6 @@ val sourcesJar by tasks.registering(Jar::class) {
 tasks.named<BootRun>("bootRun") {
     if (project.hasProperty("profiles")) {
         args = listOf("--spring.profiles.active=" + project.property("profiles"))
-    }
-}
-
-tasks.withType<ProcessResources> {
-    doLast {
-        val file = File("$buildDir/resources/main/build.properties")
-        file.createNewFile()
-        file.printWriter()
-            .use { out: PrintWriter ->
-                out.println("group=${project.group}")
-                out.println("name=${project.name}")
-                out.println("version=${project.version}")
-            }
     }
 }
 

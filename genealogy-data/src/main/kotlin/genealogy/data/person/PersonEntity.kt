@@ -60,6 +60,7 @@ class PersonEntity(
         joinColumns = [JoinColumn(name = "personId")],
         inverseJoinColumns = [JoinColumn(name = "documentId")]
     )
+
     override var documents: MutableList<DocumentEntity>,
 
     /** Поселения, в которых проживал человек */
@@ -69,6 +70,7 @@ class PersonEntity(
         joinColumns = [JoinColumn(name = "personId")],
         inverseJoinColumns = [JoinColumn(name = "settlementId")]
     )
+
     override var settlements: MutableList<SettlementEntity>,
 
     /** Дворы, в которых проживал человек */

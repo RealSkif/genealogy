@@ -11,4 +11,5 @@ interface DocumentRepository {
     fun findByTitle(title: String): Document?
     fun findByTitle(titles: Collection<String>): Collection<Document>?
     fun findAll(): Collection<Document>
+    fun findByIdOrThrow(documentId: UUID): Document
 }

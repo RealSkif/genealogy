@@ -1,13 +1,18 @@
 package genealogy.web.person
 
+import genealogy.domain.person.FindPersonsByFilterQuery
+import genealogy.domain.person.Person
 import genealogy.domain.person.crud.*
 import genealogy.domain.settlement.crud.*
+import genealogy.domain.utils.PageContent
+import genealogy.domain.utils.PageContentImpl
 import genealogy.domain.utils.command.CommandBus
 import genealogy.domain.utils.query.QueryBus
 import genealogy.web.person.PersonMapper.toDto
 import genealogy.web.settlement.SettlementDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.data.domain.Page
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -88,5 +93,26 @@ class PersonController(
             query = FindAllPersonsQuery()
         ).toDto()
         return x
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/filter")
+    @Operation(summary = "")
+    fun findByFilter(
+        @RequestBody personFilter: PersonFilterDto
+    ): PageContent<PersonDto> {
+        val x = queryBus.execute(
+            query = FindPersonsByFilterQuery(personFilter)
+        )
+        return PageContentImpl(
+            content = x.content.toDto().toList(),
+            last = x.isLast,
+            totalPages = x.totalPages,
+            totalElements = x.totalElements,
+            numberOfElements = x.numberOfElements,
+            first = x.isFirst,
+            size = x.size,
+            number = x.number
+        )
     }
 }

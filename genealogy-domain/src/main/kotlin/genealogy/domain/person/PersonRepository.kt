@@ -1,5 +1,6 @@
 package genealogy.domain.person
 
+import org.springframework.data.domain.Page
 import java.util.*
 
 /** Репозиторий для работы с людьми */
@@ -11,4 +12,5 @@ interface PersonRepository {
     fun findByFullName(person: Person): Person?
     fun findByFullName(persons: Collection<Person>): Collection<Person>?
     fun findAll(): Collection<Person>
+    fun findByFilter(personFilter: PersonFilter): Page<Person>?
 }

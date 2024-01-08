@@ -6,7 +6,7 @@ import genealogy.domain.document.DocumentTypeEnum
 enum class SocialStatusEnum(
     val status: String
 ) {
-    CLERICAL("духовный"),
+    CLERICAL("духовный и его домашние"),
     PEASANT("поселяне"),
     LONE("бобыли"),
     MILITARY("военные и их домашние"),

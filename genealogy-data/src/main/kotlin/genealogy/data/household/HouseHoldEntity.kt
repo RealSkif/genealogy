@@ -24,7 +24,7 @@ class HouseHoldEntity(
     override var settlementId: UUID,
 
     /** Люди, относящиеся к двору */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "houseHolds")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], mappedBy = "houseHolds")
     override var persons: MutableCollection<PersonEntity> = mutableListOf()
 
 ) : HouseHold

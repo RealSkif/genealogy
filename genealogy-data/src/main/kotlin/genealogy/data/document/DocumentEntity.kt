@@ -4,9 +4,9 @@ import genealogy.data.person.PersonEntity
 import genealogy.data.settlement.SettlementEntity
 import genealogy.domain.document.Document
 import genealogy.domain.document.DocumentTypeEnum
+import jakarta.persistence.*
 import java.time.LocalDate
 import java.util.*
-import jakarta.persistence.*
 
 /** Документ */
 @Entity
@@ -32,10 +32,10 @@ class DocumentEntity(
     override val documentDate: LocalDate,
 
     /** Поселения, упоминаемые в документе */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "documents")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], mappedBy = "documents")
     override var settlements: MutableList<SettlementEntity>? = mutableListOf(),
 
     /** Люди, упоминаемые в документе */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "documents")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], mappedBy = "documents")
     override var persons: MutableList<PersonEntity>? = mutableListOf()
 ) : Document

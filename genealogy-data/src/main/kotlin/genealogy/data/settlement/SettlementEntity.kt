@@ -21,7 +21,7 @@ class SettlementEntity(
     override val settlementName: String,
 
     /** Документы, в которых упоминается поселение */
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], )
     @JoinTable(
         name = "document_settlement",
         joinColumns = [JoinColumn(name = "settlementId")],
@@ -30,6 +30,6 @@ class SettlementEntity(
     override var documents: MutableCollection<DocumentEntity> = mutableListOf(),
 
     /** Люди, проживавшие в поселении */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "settlements")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], mappedBy = "settlements")
     override var persons: MutableCollection<PersonEntity>? = mutableListOf()
 ) : Settlement

@@ -7,4 +7,6 @@ import java.util.*
 interface DocumentJpaRepository : JpaRepository<DocumentEntity, UUID> {
     fun findByTitle(title: String): DocumentEntity?
     fun findByTitleIn(titles: Collection<String>): Collection<DocumentEntity>?
+
+    override fun findAll(): MutableList<DocumentEntity>
 }

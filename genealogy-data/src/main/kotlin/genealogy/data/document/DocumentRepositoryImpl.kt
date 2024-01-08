@@ -35,9 +35,25 @@ class DocumentRepositoryImpl(
         documentJpaRepository.findByTitleIn(titles)
 
 
+    override fun findAll(): Collection<Document> {
+        val x = documentJpaRepository.findAll()
+        return x}
+
+
+
+
+    /**
+     * Получение документа по идентификатору.
+     * Выбрасывает исключение, если документ не найден
+     *
+     * @param documentId Идентификатор документа
+     * @return Тип обращения
+     */
     @EntityGraph(attributePaths = [
         "settlements", "persons"])
-    override fun findAll(): Collection<Document> =
-        documentJpaRepository.findAll()
+    override fun findByIdOrThrow(documentId: UUID): Document =
+        documentJpaRepository.findById(documentId).orElseThrow {
+            DocumentNotFoundException(documentId)
+        }
 
 }

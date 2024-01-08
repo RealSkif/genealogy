@@ -12,12 +12,12 @@ import java.util.*
 
 @RestController
 @RequestMapping("/documents")
+@CrossOrigin(origins = ["http://localhost:3000"])
 @Tag(name = "Документы")
 class DocumentController(
     private val queryBus: QueryBus,
     private val commandBus: CommandBus
 ) {
-
     @Transactional()
     @PostMapping()
     @Operation(summary = "Сохранение документа")
@@ -60,6 +60,7 @@ class DocumentController(
 
     @Transactional()
     @DeleteMapping("/delete/{id}")
+    @ResponseBody
     @Operation(summary = "Удаление документа")
     fun deleteDocument(
         @PathVariable id: UUID
@@ -78,13 +79,23 @@ class DocumentController(
             command = DeleteDocumentsCommand(documentIds)
         )
 
-
     @Transactional(readOnly = true)
     @GetMapping()
     @Operation(summary = "")
     fun findAll(): Collection<DocumentDto> {
-        return queryBus.execute(
+        val documents = queryBus.execute(
             query = FindAllDocumentsQuery()
         ).toDto()
+        return documents
     }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/{id}")
+    @Operation(summary = "Поиск документа по идентификатору")
+    fun findById(
+        @PathVariable id: UUID
+    ): DocumentDto = queryBus.execute(
+        query = FindDocumentByIdQuery(id)
+    ).toDto()
+
 }

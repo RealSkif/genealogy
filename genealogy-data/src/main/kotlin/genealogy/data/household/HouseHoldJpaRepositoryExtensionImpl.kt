@@ -1,8 +1,10 @@
 package genealogy.data.household
 
 import com.querydsl.jpa.impl.JPAQuery
+import jakarta.persistence.EntityManager
+//import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
-import javax.persistence.EntityManager
+//import javax.persistence.EntityManager
 
 @Repository
 class HouseHoldJpaRepositoryExtensionImpl(

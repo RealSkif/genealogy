@@ -3,16 +3,12 @@ package genealogy.api.document.crud
 import genealogy.api.util.stereotype.UseCase
 import genealogy.domain.document.Document
 import genealogy.domain.document.DocumentRepository
+import java.util.*
 
 @UseCase
-class FindAllDocumentsUseCase (
+class FindDocumentUseCase(
     private val documentRepository: DocumentRepository
 ) {
-    //fun execute(): Collection<Document> =
-//    documentRepository.findAll()
-//}
-    fun execute(): Collection<Document>{
-    val x =
-documentRepository.findAll()
-    return x}
+    fun execute(documentId: UUID): Document =
+        documentRepository.findByIdOrThrow(documentId)
 }

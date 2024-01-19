@@ -20,8 +20,6 @@ allprojects {
     }
 }
 
-
-
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
     apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
@@ -33,12 +31,6 @@ subprojects {
                 mavenBom(SpringBootPlugin.BOM_COORDINATES)
             }
         }
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = "21"
-        }
-    }
 }
 
 tasks.withType<KotlinCompile> {
